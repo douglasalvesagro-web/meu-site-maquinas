@@ -1,0 +1,265 @@
+<!--
+Arquivo: Site-venda-maquinas-agro.html
+Descrição: Página única (HTML/CSS/JS) pronta para listar máquinas agrícolas usadas.
+Instruções rápidas:
+ 1. Salve este conteúdo como `index.html`.
+ 2. Abra no navegador (duplo clique) para ver localmente.
+ 3. Para publicar grátis: envie para o GitHub Pages (repositório), Netlify Drop ou Vercel (gratuito). Ou copie/cole no editor do Wix/GitHub Pages.
+ 4. Substitua as imagens e dados no array `machines` no final do arquivo.
+ 5. Atualize o número do WhatsApp em `WHATSAPP_NUMBER` (formato internacional sem +, ex: 5511999999999).
+
+Se quiser que eu personalize (cores, logo, textos, adicionar formulários com backend), me diga o que mudar e eu atualizo.
+-->
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Máquinas Agrícolas Usadas — Venda</title>
+  <meta name="description" content="Compre e venda máquinas agrícolas usadas. Catálogo, contato por WhatsApp e informações técnicas.">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <style>
+    :root{--primary:#2b6cb0;--accent:#ed8936;--bg:#f7fafc;--card:#ffffff}
+    *{box-sizing:border-box}
+    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0; background:var(--bg); color:#0f172a}
+    a{color:inherit}
+    header{background:linear-gradient(90deg,var(--primary),#27648a);color:#fff;padding:18px 20px}
+    .container{max-width:1100px;margin:0 auto;padding:20px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:54px;height:54px;border-radius:8px;background:#fff3;display:flex;align-items:center;justify-content:center;font-weight:700}
+    .hero{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;padding:28px 0}
+    .hero-left{min-width:260px;flex:1}
+    h1{margin:0;font-size:26px}
+    p.lead{margin:8px 0 0;color:#e6eef8}
+    .actions{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;text-decoration:none;font-weight:600}
+    .btn-primary{background:#fff;color:var(--primary)}
+    .btn-wa{background:var(--accent);color:#fff}
+
+    .searchbar{display:flex;gap:10px;margin-top:18px}
+    .searchbar input, .searchbar select{padding:10px;border-radius:8px;border:1px solid #d1d5db;flex:1}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+    .card{background:var(--card);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(10,20,40,0.06);display:flex;flex-direction:column}
+    .card img{width:100%;height:180px;object-fit:cover}
+    .card-body{padding:12px;display:flex;flex-direction:column;gap:8px}
+    .price{font-weight:700;color:var(--primary)}
+    .meta{font-size:13px;color:#475569}
+    footer{padding:18px 20px;background:#fff;margin-top:28px;border-top:1px solid #e6eef8}
+
+    /* responsive */
+    @media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:600px){.grid{grid-template-columns:1fr}.hero{flex-direction:column}.hero-right{width:100%}}
+
+    /* modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.5);padding:20px}
+    .modal.open{display:flex}
+    .modal-card{width:100%;max-width:680px;background:#fff;border-radius:12px;overflow:hidden}
+    .modal-card .body{padding:16px}
+
+    /* small helpers */
+    .badge{display:inline-block;padding:6px 8px;border-radius:999px;background:#eef2ff;color:#1e293b;font-weight:600;font-size:13px}
+    .tag{font-size:13px;padding:6px 8px;border-radius:6px;background:#f1f5f9}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="brand">
+        <div class="logo">AG</div>
+        <div>
+          <div style="font-weight:700">Máquinas Agro — Usados</div>
+          <div style="font-size:13px;color:#e6eef8">Venda direta | Fotos reais | Contato rápido</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-left">
+        <h1>Compre e venda máquinas agrícolas usadas com segurança</h1>
+        <p class="lead">Catálogo atualizado com fotos, informações técnicas e contato direto por WhatsApp. Sem intermediários.</p>
+        <div class="actions">
+          <a id="openCatalog" class="btn btn-primary" href="#catalog">Ver catálogo</a>
+          <a id="whatsTop" class="btn btn-wa" href="#">Abrir WhatsApp</a>
+        </div>
+
+        <div class="searchbar">
+          <input id="searchInput" placeholder="Buscar por modelo, marca ou ano..." />
+          <select id="filterYear"><option value="">Todas as idades</option></select>
+          <button id="clearBtn" class="btn" style="background:#fff">Limpar</button>
+        </div>
+
+      </div>
+      <div class="hero-right">
+        <img src="https://images.unsplash.com/photo-1607082340637-1b7afc0ea306?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="máquina agrícola" style="width:360px;max-width:100%;border-radius:12px;box-shadow:0 10px 20px rgba(2,6,23,0.08)">
+      </div>
+    </section>
+
+    <section id="catalog">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h2>Catálogo</h2>
+        <div style="font-size:14px;color:#475569">Total: <span id="totalCount">0</span></div>
+      </div>
+
+      <div class="grid" id="grid">
+        <!-- Cards gerados por JS -->
+      </div>
+
+    </section>
+
+    <!-- Modal de detalhe -->
+    <div id="modal" class="modal" aria-hidden="true">
+      <div class="modal-card" role="dialog" aria-modal="true">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #eef2ff">
+          <strong id="modalTitle">Detalhes da máquina</strong>
+          <button id="closeModal" aria-label="Fechar" style="background:none;border:0;font-size:18px;padding:6px;cursor:pointer">✕</button>
+        </div>
+        <div class="body" style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:260px"><img id="modalImg" src="" alt="" style="width:100%;height:300px;object-fit:cover"></div>
+          <div style="flex:1;min-width:200px;padding:8px">
+            <div style="margin-bottom:8px"><span class="badge" id="modalPrice">R$ 0,00</span></div>
+            <div class="meta" id="modalMeta">Marca • Modelo • Ano</div>
+            <p id="modalDesc" style="margin-top:12px;color:#0f172a"></p>
+            <div style="margin-top:16px;display:flex;gap:8px">
+              <a id="modalWhats" class="btn btn-wa" href="#">Falar no WhatsApp</a>
+              <a id="modalContact" class="btn" href="mailto:contato@seunegocio.com?subject=Interesse%20na%20máquina">Enviar e‑mail</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div>
+        <strong>Máquinas Agro — Usados</strong>
+        <div style="font-size:13px;color:#475569">Rio Verde, Goiás · Atendimento por WhatsApp</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+        <a href="#">Política de Privacidade</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ===== CONFIGURAÇÃO =====
+    // Atualize para o seu número (formato: 5511xxxxxxxx)
+    const WHATSAPP_NUMBER = '5511999999999';
+    const YOUR_INSTAGRAM = 'https://instagram.com/seuusuario';
+
+    // ===== DADOS DE EXEMPLO (substitua pelos seus) =====
+    const machines = [
+      {
+        id:1, title:'Trator John Deere 5075E', brand:'John Deere', model:'5075E', year:2018, price:125000, hours:4200,
+        img:'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder',
+        desc:'Trator em bom estado, revisão feita, pneus 70%.'
+      },
+      {
+        id:2, title:'Colheitadeira New Holland CX8070', brand:'New Holland', model:'CX8070', year:2014, price:420000, hours:8200,
+        img:'https://images.unsplash.com/photo-1505842465776-3b1f5d6d1f4f?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder',
+        desc:'Colheitadeira revisada, cabine climatizada, 24 pés.'
+      },
+      {
+        id:3, title:'Plantadeira Stara 24 linhas', brand:'Stara', model:'24L', year:2020, price:88000, hours:0,
+        img:'https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder',
+        desc:'Plantadeira em ótimo estado, pronta para uso.'
+      }
+    ];
+
+    // ===== UTILITÁRIOS =====
+    function formatPrice(v){ return v ? v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) : 'Sob consulta'; }
+    function el(q){ return document.querySelector(q) }
+
+    // ===== MONTA SELECT DE ANOS =====
+    (function populateYears(){
+      const years = Array.from(new Set(machines.map(m=>m.year))).sort((a,b)=>b-a);
+      const sel = el('#filterYear');
+      years.forEach(y => { const opt = document.createElement('option'); opt.value=y; opt.textContent=y; sel.appendChild(opt) })
+    })();
+
+    // ===== RENDERIZA CARDS =====
+    function render(list){
+      const grid = el('#grid'); grid.innerHTML='';
+      el('#totalCount').textContent = list.length;
+      list.forEach(m => {
+        const card = document.createElement('article'); card.className='card';
+        card.innerHTML = `
+          <img loading="lazy" src="${m.img}" alt="${m.title}">
+          <div class="card-body">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <strong>${m.title}</strong>
+              <div class="price">${formatPrice(m.price)}</div>
+            </div>
+            <div class="meta">${m.brand} • ${m.model} • ${m.year} • ${m.hours} h</div>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button class="btn" data-id="${m.id}">Ver</button>
+              <a class="btn btn-wa" href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Tenho interesse na máquina: '+m.title+' (ID:'+m.id+')')}">WhatsApp</a>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      })
+    }
+
+    // ===== FILTROS =====
+    function applyFilters(){
+      const q = el('#searchInput').value.trim().toLowerCase();
+      const year = el('#filterYear').value;
+      let filtered = machines.filter(m => {
+        const inText = (m.title+' '+m.brand+' '+m.model+' '+m.desc).toLowerCase().includes(q);
+        const inYear = year ? String(m.year) === year : true;
+        return inText && inYear;
+      });
+      render(filtered);
+    }
+
+    // ===== EVENTOS =====
+    el('#searchInput').addEventListener('input', applyFilters);
+    el('#filterYear').addEventListener('change', applyFilters);
+    el('#clearBtn').addEventListener('click', ()=>{ el('#searchInput').value=''; el('#filterYear').value=''; applyFilters(); });
+
+    // abrir whatsapp top
+    el('#whatsTop').addEventListener('click', (e)=>{ e.preventDefault(); window.open('https://wa.me/'+WHATSAPP_NUMBER,'_blank') });
+    el('#openCatalog').addEventListener('click', ()=>{ window.location.hash='catalog' });
+
+    // delegação para abrir modal
+    document.addEventListener('click', (ev)=>{
+      const btn = ev.target.closest('button[data-id]');
+      if(btn){
+        const id = Number(btn.dataset.id);
+        const m = machines.find(x=>x.id===id);
+        if(m) openModal(m);
+      }
+    });
+
+    function openModal(m){
+      el('#modal').classList.add('open');
+      el('#modalTitle').textContent = m.title;
+      el('#modalImg').src = m.img;
+      el('#modalPrice').textContent = formatPrice(m.price);
+      el('#modalMeta').textContent = `${m.brand} • ${m.model} • ${m.year} • ${m.hours} h`;
+      el('#modalDesc').textContent = m.desc;
+      el('#modalWhats').href = 'https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent('Olá, tenho interesse na máquina: '+m.title+' (ID:'+m.id+')');
+      el('#modal').setAttribute('aria-hidden','false');
+    }
+    el('#closeModal').addEventListener('click', ()=>{ el('#modal').classList.remove('open'); el('#modal').setAttribute('aria-hidden','true') });
+    el('#modal').addEventListener('click', (e)=>{ if(e.target.id==='modal') { el('#modal').classList.remove('open'); el('#modal').setAttribute('aria-hidden','true') } });
+
+    // inicializa
+    render(machines);
+
+    // abre instagram se o usuário clicar no link tempo
+    // Atualiza link do Instagram no rodapé
+    (function setSocialLinks(){
+      document.querySelectorAll('footer a')[0].href=YOUR_INSTAGRAM;
+      document.querySelectorAll('footer a')[0].textContent='@'+YOUR_INSTAGRAM.split('/').filter(Boolean).pop();
+    })();
+  </script>
+</body>
+</html>
